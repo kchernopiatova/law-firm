@@ -246,8 +246,10 @@ public class MainClass {
             LOGGER.info("The end of the program");
         }
 
+        LOGGER.info("Creating new branch");
         LOGGER.info("Resolving conflict");
 
+        LOGGER.info("Adding new line");
 
     }
 
