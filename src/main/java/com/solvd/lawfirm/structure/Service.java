@@ -1,15 +1,19 @@
-package com.solvd.lawfirm.service;
+package com.solvd.lawfirm.structure;
 
 import com.solvd.lawfirm.exception.ServiceTimeException;
 
 import java.util.Objects;
 
-public class Service {
+public enum Service {
+
+    CIVIL("Civil law", 80),
+    CRIMINAL("Criminal law", 120),
+    INTELLECT("Intellect property", 35);
 
     private String serviceTitle;
     private int timeSpent;
 
-    public Service(String serviceTitle, int timeSpent) {
+    Service(String serviceTitle, int timeSpent) {
         this.serviceTitle = serviceTitle;
         if (timeSpent < 0) {
             throw new ServiceTimeException("Incorrect Service time spent");
@@ -20,22 +24,6 @@ public class Service {
     @Override
     public String toString() {
         return "Service title: " + serviceTitle + "; Time spent: " + timeSpent + "; ";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Service service = (Service) obj;
-        return Objects.equals(serviceTitle, service.serviceTitle);
-    }
-
-    @Override
-    public int hashCode() {
-        int prime = 31;
-        int result = 1;
-        result = prime * result + ((serviceTitle == null) ? 0 : serviceTitle.hashCode());
-        return result;
     }
 
     public String getServiceTitle() {

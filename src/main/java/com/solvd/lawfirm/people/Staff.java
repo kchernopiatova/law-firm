@@ -1,6 +1,7 @@
 package com.solvd.lawfirm.people;
 
 import com.solvd.lawfirm.exception.InvalidDateException;
+import com.solvd.lawfirm.structure.WeekDay;
 import com.solvd.lawfirm.structure.Workable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,9 +45,13 @@ public class Staff implements Speakable, Workable {
     }
 
     @Override
-    public boolean isWorking() {
-        LocalDateTime actualTime = LocalDateTime.now();
-        return actualTime.getHour() >= 8 && actualTime.getHour() <= 18;
+    public String isWorking(WeekDay day) {
+        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+            return "The person isn't working today";
+        }
+        else {
+            return "The person if working today";
+        }
     }
 
     @Override

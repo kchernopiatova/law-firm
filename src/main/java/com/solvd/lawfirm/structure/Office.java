@@ -78,9 +78,13 @@ public class Office extends Building implements Countable {
     }
 
     @Override
-    public boolean isWorking() {
-        LocalDateTime actualTime = LocalDateTime.now();
-        return actualTime.getHour() >= 8 && actualTime.getHour() <= 18;
+    public String isWorking(WeekDay day) {
+        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+            return "The office isn't working today";
+        }
+        else {
+            return "The office if working today";
+        }
     }
 
     @Override

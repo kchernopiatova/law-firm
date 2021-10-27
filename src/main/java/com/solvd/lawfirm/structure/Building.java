@@ -45,8 +45,6 @@ public abstract class Building implements Relocatable, Workable {
         return result;
     }
 
-    public abstract boolean isWorking();
-
     public abstract boolean isWorking(boolean isHoliday);
 
     public String getCity() {

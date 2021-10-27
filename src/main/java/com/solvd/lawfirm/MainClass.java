@@ -5,16 +5,17 @@ import com.solvd.lawfirm.cases.CurrentCase;
 import com.solvd.lawfirm.exception.InvalidDateException;
 import com.solvd.lawfirm.infrastructure.*;
 import com.solvd.lawfirm.people.*;
-import com.solvd.lawfirm.service.DocumentCheck;
-import com.solvd.lawfirm.service.Service;
+import com.solvd.lawfirm.structure.Service;
 import com.solvd.lawfirm.serviceclass.*;
-import com.solvd.lawfirm.structure.Accounting;
-import com.solvd.lawfirm.structure.Court;
-import com.solvd.lawfirm.structure.Department;
-import com.solvd.lawfirm.structure.Office;
+import com.solvd.lawfirm.structure.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -22,13 +23,9 @@ public class MainClass {
 
     private static final Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        Service civilLaw = new Service("Civil Law consultation", 80);
-        Service criminalLaw = new Service("Criminal Law consultation", 120);
-        Service intellectProperty = new Service("Intellectual protection", 35);
-
-        LOGGER.info(civilLaw);
+        LOGGER.info(Service.CIVIL);
         System.out.println();
 
         Lawyer andrew = new Lawyer("Andrew", "Wise", LocalDate.of(1985, 5, 1));
@@ -42,11 +39,11 @@ public class MainClass {
         lilian.setOnWork(false);
 
         Set<Service> andrewService = new HashSet<>();
-        andrewService.add(criminalLaw);
-        andrewService.add(intellectProperty);
+        andrewService.add(Service.CRIMINAL);
+        andrewService.add(Service.INTELLECT);
 
         Set<Service> lilianService = new HashSet<>();
-        lilianService.add(civilLaw);
+        lilianService.add(Service.CIVIL);
 
         Set<Service> ivanService = new HashSet<>();
         ivanService.addAll(andrewService);
@@ -119,20 +116,13 @@ public class MainClass {
         LOGGER.info(personal);
         System.out.println();
 
-        Department hr = new Department("Human Resources");
-        Department qa = new Department("Quality assurance");
-        Department web = new Department("Web Development");
-
-        web.setNumberOfEmployee(6);
-        hr.setNumberOfEmployee(3);
-
         Set<Department> office1Department = new HashSet<>();
-        office1Department.add(hr);
-        office1Department.add(qa);
+        office1Department.add(Department.HR);
+        office1Department.add(Department.QA);
 
         Set<Department> office2Department = new HashSet<>();
-        office2Department.add(web);
-        office2Department.add(qa);
+        office2Department.add(Department.WEB);
+        office2Department.add(Department.QA);
 
         Map<Integer, Equipment> office1Equipment = new HashMap<>();
         office1Equipment.put(1, directorPhone);
@@ -155,10 +145,24 @@ public class MainClass {
         Office theSecond = new Office("Minsk", "Vaneeva 2", LocalDate.of(2018, 1, 3),
                 office2Equipment, office2Lawyer, office2Department);
 
+        for (Department element : office1Department) {
+            switch (element) {
+                case QA:
+                    LOGGER.info("There is QA department");
+                    break;
+                case HR:
+                    LOGGER.info("There is HR department");
+                    break;
+                case WEB:
+                    LOGGER.info("There is Web department");
+                    break;
+            }
+        }
+
         LOGGER.info(theFirst);
         System.out.println();
 
-        LOGGER.info("The offices are working? " + theFirst.isWorking());
+        LOGGER.info("The offices are working? " + theFirst.isWorking(WeekDay.TUESDAY));
 
         boolean isHoliday = true;
         LOGGER.info("The offices are working? " + theSecond.isWorking(isHoliday));
@@ -190,9 +194,6 @@ public class MainClass {
         Set<String> docs1 = new TreeSet<>();
         docs1.add("delo1");
         docs1.add("pasport");
-
-        DocumentCheck primary = new DocumentCheck("DocumentCheck", 40, docs1, andrew);
-        LOGGER.info(primary);
 
         Equipment iphone = new Phone(4, 40, "472892");
         ControlClass.equipmentPurchase(iphone, 6);
@@ -250,7 +251,34 @@ public class MainClass {
         LOGGER.info("Resolving conflict");
 
         LOGGER.info("Adding new line");
+        System.out.println();
 
+        CEO.createInstance("Vladislav", "Kot", LocalDate.of(1980, 2, 6));
+
+        String fileName = "src/main/resources/text.txt";
+        String text = FileUtils.readFileToString(new File(fileName), StandardCharsets.UTF_8);
+        text = text.toLowerCase(Locale.ROOT);
+
+        Map<String, Integer> words = new TreeMap<>();
+        String delimeter = "[^a-zA-Z-’']";
+
+        for (String word : text.split(delimeter)) {
+            int wordAmount = StringUtils.countMatches(text, word);
+            words.put(word, wordAmount);
+        }
+
+        Map<String, Integer> sortedWords = new HashMap<>();
+        sortedWords = WordsCounting.sortByComparator(words);
+        System.out.println(sortedWords);
+
+        StringBuilder stringToFile = new StringBuilder();
+        for (Map.Entry<String, Integer> item : sortedWords.entrySet()) {
+            String result = "Word: " + item.getKey() + "; amount: " + item.getValue();
+            LOGGER.info(result);
+            stringToFile.append(result);
+            stringToFile.append("\n");
+        }
+
+        FileUtils.writeStringToFile(new File("output.txt"), String.valueOf(stringToFile), StandardCharsets.UTF_8);
     }
-
 }
