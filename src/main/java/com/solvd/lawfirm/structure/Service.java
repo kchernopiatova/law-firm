@@ -2,8 +2,6 @@ package com.solvd.lawfirm.structure;
 
 import com.solvd.lawfirm.exception.ServiceTimeException;
 
-import java.util.Objects;
-
 public enum Service {
 
     CIVIL("Civil law", 80),

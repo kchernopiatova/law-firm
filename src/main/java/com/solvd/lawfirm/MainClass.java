@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class MainClass {
 
@@ -57,7 +59,6 @@ public class MainClass {
         System.out.println();
 
         LOGGER.info("Andrew's salary: " + andrew.salary());
-        LOGGER.info("Ivan's salary: " + ivan.salary(1.30));
         System.out.println();
 
         Set<Lawyer> court1Lawyer = new HashSet<>();
@@ -144,20 +145,6 @@ public class MainClass {
                 office1Equipment, office1Lawyer, office1Department);
         Office theSecond = new Office("Minsk", "Vaneeva 2", LocalDate.of(2018, 1, 3),
                 office2Equipment, office2Lawyer, office2Department);
-
-        for (Department element : office1Department) {
-            switch (element) {
-                case QA:
-                    LOGGER.info("There is QA department");
-                    break;
-                case HR:
-                    LOGGER.info("There is HR department");
-                    break;
-                case WEB:
-                    LOGGER.info("There is Web department");
-                    break;
-            }
-        }
 
         LOGGER.info(theFirst);
         System.out.println();
@@ -253,7 +240,22 @@ public class MainClass {
         LOGGER.info("Adding new line");
         System.out.println();
 
-        CEO.createInstance("Vladislav", "Kot", LocalDate.of(1980, 2, 6));
+        CEO chris = CEO.createInstance("Vladislav", "Kot", LocalDate.of(1980, 2, 6));
+        System.out.println(chris);
+
+        for (Department element : office1Department) {
+            switch (element) {
+                case QA:
+                    LOGGER.info("There is QA department");
+                    break;
+                case HR:
+                    LOGGER.info("There is HR department");
+                    break;
+                case WEB:
+                    LOGGER.info("There is Web department");
+                    break;
+            }
+        }
 
         String fileName = "src/main/resources/text.txt";
         String text = FileUtils.readFileToString(new File(fileName), StandardCharsets.UTF_8);
@@ -267,8 +269,7 @@ public class MainClass {
             words.put(word, wordAmount);
         }
 
-        Map<String, Integer> sortedWords = new HashMap<>();
-        sortedWords = WordsCounting.sortByComparator(words);
+        Map<String, Integer> sortedWords = WordsCounting.sortByComparator(words);
         System.out.println(sortedWords);
 
         StringBuilder stringToFile = new StringBuilder();
@@ -280,5 +281,13 @@ public class MainClass {
         }
 
         FileUtils.writeStringToFile(new File("output.txt"), String.valueOf(stringToFile), StandardCharsets.UTF_8);
+        System.out.println();
+
+        Function<Double, Double> increasedSalary = (salaryFactor) -> {
+            Integer initialRate = 1500;
+            return initialRate * salaryFactor;
+        };
+
+        misha.salary(increasedSalary);
     }
 }

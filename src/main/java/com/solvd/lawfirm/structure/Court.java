@@ -47,7 +47,7 @@ public class Court extends Building {
 
     @Override
     public String isWorking(WeekDay day) {
-        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+        if (WeekDay.SATURDAY.equals(day) || WeekDay.SUNDAY.equals(day)) {
             return "The court isn't working today";
         }
         else {

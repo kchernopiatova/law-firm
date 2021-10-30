@@ -79,7 +79,7 @@ public class Office extends Building implements Countable {
 
     @Override
     public String isWorking(WeekDay day) {
-        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+        if (WeekDay.SATURDAY.equals(day) || WeekDay.SUNDAY.equals(day)) {
             return "The office isn't working today";
         }
         else {

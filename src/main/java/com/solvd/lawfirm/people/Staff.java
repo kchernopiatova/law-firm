@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Staff implements Speakable, Workable {
 
@@ -31,7 +33,7 @@ public class Staff implements Speakable, Workable {
 
     @Override
     public void sayHB() {
-        LOGGER.info(firstName + " " + lastName + ", Happy people.Birthday!");
+        LOGGER.info(firstName + " " + lastName + ", Happy Birthday!");
     }
 
     @Override
@@ -46,7 +48,7 @@ public class Staff implements Speakable, Workable {
 
     @Override
     public String isWorking(WeekDay day) {
-        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+        if (WeekDay.SATURDAY.equals(day) || WeekDay.SUNDAY.equals(day)) {
             return "The person isn't working today";
         }
         else {
@@ -60,9 +62,9 @@ public class Staff implements Speakable, Workable {
         return actualTime.getHour() >= 8 && actualTime.getHour() <= 18 && !isHoliday;
     }
 
-    public double salary(double factor) {
-        double initialRate = 1200;
-        return initialRate * factor;
+    public void salary(Function<Double, Double> function) {
+        Double salary = function.apply(1.0);
+        LOGGER.info("Initial salary of the staff is: " + salary);
     }
 
     @Override

@@ -10,7 +10,6 @@ public enum Department {
         this.title = title;
     }
 
-
     @Override
     public String toString() {
         return "Name: " + title + ";";
