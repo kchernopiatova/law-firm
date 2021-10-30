@@ -2,7 +2,7 @@ package com.solvd.lawfirm.structure;
 
 public interface Workable {
 
-    boolean isWorking();
+    String isWorking(WeekDay day);
 
     boolean isWorking(boolean isHoliday);
 

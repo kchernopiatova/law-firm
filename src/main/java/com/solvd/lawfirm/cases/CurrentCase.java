@@ -1,7 +1,7 @@
 package com.solvd.lawfirm.cases;
 
 import com.solvd.lawfirm.people.Client;
-import com.solvd.lawfirm.service.Service;
+import com.solvd.lawfirm.structure.Service;
 
 import java.util.Date;
 import java.util.Objects;

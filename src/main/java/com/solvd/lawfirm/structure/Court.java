@@ -46,9 +46,13 @@ public class Court extends Building {
     }
 
     @Override
-    public boolean isWorking() {
-        LocalDateTime actualTime = LocalDateTime.now();
-        return actualTime.getHour() >= 8 && actualTime.getHour() <= 18;
+    public String isWorking(WeekDay day) {
+        if (day == WeekDay.SATURDAY || day == WeekDay.SUNDAY) {
+            return "The court isn't working today";
+        }
+        else {
+            return "The court if working today";
+        }
     }
 
     @Override

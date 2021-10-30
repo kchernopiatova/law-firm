@@ -1,7 +1,7 @@
 package com.solvd.lawfirm.people;
 
 import com.solvd.lawfirm.cases.CurrentCase;
-import com.solvd.lawfirm.service.Service;
+import com.solvd.lawfirm.structure.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
