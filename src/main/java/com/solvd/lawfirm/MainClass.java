@@ -15,6 +15,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
@@ -338,5 +341,23 @@ public class MainClass {
         clients.stream()
                 .filter(client -> client.getCaseCategory().equals("Civil"))
                 .forEach(client -> LOGGER.info(client));
+        System.out.println();
+
+        Client newClient = null;
+        try {
+            Class<?> clientClass = Class.forName("com.solvd.lawfirm.people.Client");
+            Class[] clientParameters = {String.class, String.class};
+            newClient = (Client) clientClass.getConstructor(clientParameters).newInstance("Eva", "Green");
+            Field clientLawyer = clientClass.getDeclaredField("lawyer");
+            clientLawyer.setAccessible(true);
+            clientLawyer.set(newClient, lilian);
+            LOGGER.info(newClient);
+            Method clientConsult = clientClass.getDeclaredMethod("haveConsultation");
+            clientConsult.setAccessible(true);
+            clientConsult.invoke(newClient);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                NoSuchMethodException | InvocationTargetException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 }

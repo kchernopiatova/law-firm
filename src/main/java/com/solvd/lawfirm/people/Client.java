@@ -20,6 +20,10 @@ public class Client implements Speakable {
         caseCategory = "undefined";
     }
 
+    public Client() {
+
+    }
+
     @Override
     public void sayHB() {
         LOGGER.info(firstName + " " + lastName + ", Happy people.Birthday!");
