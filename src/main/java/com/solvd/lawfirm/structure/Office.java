@@ -1,6 +1,7 @@
 package com.solvd.lawfirm.structure;
 
 import com.solvd.lawfirm.exception.EmptyArrayException;
+import com.solvd.lawfirm.exception.EmptySetException;
 import com.solvd.lawfirm.infrastructure.Equipment;
 import com.solvd.lawfirm.people.Lawyer;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class Office extends Building implements Countable {
@@ -35,27 +37,25 @@ public class Office extends Building implements Countable {
     @Override
     public String toString() {
         StringBuilder eq = new StringBuilder();
-        for (Map.Entry<Integer, Equipment> entry : equipment.entrySet()) {
-            eq.append("\n").append(entry.toString());
-        }
+        equipment.forEach((key, value) -> eq.append("\n").append(equipment.toString()));
 
         StringBuilder law = new StringBuilder();
-        for (Lawyer value : lawyer) {
-            law.append("\n").append(value.toString());
-        }
+        lawyer.forEach(lawyer -> law.append("\n").append(lawyer.toString()));
 
         StringBuilder dep = new StringBuilder();
-        for (Department value : department) {
-            dep.append("\n").append(value.toString());
-        }
+        department.forEach(department -> dep.append("\n").append(department.toString()));
 
         return super.toString() + "\nEquipment:" + eq + "\nLawyers:" + law + "\nDepartments:" + dep;
     }
 
     @Override
-    public int countLawyers() {
-        int numberOfLawyers = lawyer.size();
-        return numberOfLawyers;
+    public Optional<Integer> countLawyers() {
+        Integer numberOfLawyers = null;
+        if (lawyer.size() > 0) {
+            numberOfLawyers = lawyer.size();
+        }
+        return Optional.ofNullable(Optional.ofNullable(numberOfLawyers)
+                .orElseThrow(() -> new EmptySetException("The set of lawyers is empty")));
     }
 
     @Override
@@ -81,8 +81,7 @@ public class Office extends Building implements Countable {
     public String isWorking(WeekDay day) {
         if (WeekDay.SATURDAY.equals(day) || WeekDay.SUNDAY.equals(day)) {
             return "The office isn't working today";
-        }
-        else {
+        } else {
             return "The office if working today";
         }
     }

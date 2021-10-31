@@ -34,7 +34,7 @@ public class Printer extends Equipment {
 
     @Override
     public String toString() {
-        return "Pints in color? " + colorPrint + "; " + super.toString();
+        return "Prints in color? " + colorPrint + "; " + super.toString();
     }
 
     @Override

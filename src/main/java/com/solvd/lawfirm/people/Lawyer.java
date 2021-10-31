@@ -24,6 +24,16 @@ public class Lawyer extends Staff {
 
     }
 
+    public void takeCase(CurrentCase case1, Lawyer lawyer) {
+        if (case1.getVacant()) {
+            LOGGER.info("The case is taken by " + firstName);
+            case1.setVacant(false);
+            case1.setLawyer(lawyer);
+        } else {
+            LOGGER.info("This case is already taken");
+        }
+    }
+
     @Override
     public String toString() {
         return super.toString() + " Is Lawyer on work? " + onWork + "; ";
@@ -46,16 +56,6 @@ public class Lawyer extends Staff {
         }
         result += super.hashCode();
         return result;
-    }
-
-    public void takeCase(CurrentCase case1, Lawyer lawyer) {
-        if (case1.getVacant()) {
-            LOGGER.info("The case is taken by " + firstName);
-            case1.setVacant(false);
-            case1.setLawyer(lawyer);
-        } else {
-            LOGGER.info("This case is already taken");
-        }
     }
 
     public Boolean getOnWork() {

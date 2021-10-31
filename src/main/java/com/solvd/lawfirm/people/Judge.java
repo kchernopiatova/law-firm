@@ -2,13 +2,11 @@ package com.solvd.lawfirm.people;
 
 import com.solvd.lawfirm.MainClass;
 import com.solvd.lawfirm.structure.Court;
-import com.solvd.lawfirm.structure.Department;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Judge extends Staff {
@@ -20,6 +18,12 @@ public class Judge extends Staff {
     public Judge(String firstName, String lastName, LocalDate dob, Court court) {
         super(firstName, lastName, dob);
         this.court = court;
+    }
+
+    @Override
+    public void salary(Function<Double, Double> function) {
+        Double salary = function.apply(1.4);
+        LOGGER.info("The salary of Judge is: " + salary);
     }
 
     @Override
@@ -42,12 +46,6 @@ public class Judge extends Staff {
         result = prime * result + ((court == null) ? 0 : court.hashCode());
         result += super.hashCode();
         return result;
-    }
-
-    @Override
-    public void salary(Function<Double, Double> function) {
-        Double salary = function.apply(1.4);
-        LOGGER.info("The salary of Judge is: " + salary);
     }
 
     public Court getCourt() {

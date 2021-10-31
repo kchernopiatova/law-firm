@@ -17,9 +17,7 @@ public class WordsCounting {
 
         list.sort(compareWords);
         Map<String, Integer> sortedMap = new LinkedHashMap<>();
-        for (Map.Entry<String, Integer> entry : list) {
-            sortedMap.put(entry.getKey(), entry.getValue());
-        }
+        list.forEach((k) -> sortedMap.put(k.getKey(), k.getValue()));
 
         return sortedMap;
     }

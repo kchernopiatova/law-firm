@@ -18,8 +18,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MainClass {
 
@@ -101,6 +102,10 @@ public class MainClass {
         LOGGER.info(oleg);
         System.out.println();
 
+        List<Client> clients = new ArrayList<>();
+        clients.add(oleg);
+        clients.add(mike);
+
         Computer personal = new Computer(10, 500, "HP");
         Computer portable = new Computer(3, 380, "Lenovo");
         Phone directorPhone = new Phone(2, 300, "52920");
@@ -146,6 +151,10 @@ public class MainClass {
         Office theSecond = new Office("Minsk", "Vaneeva 2", LocalDate.of(2018, 1, 3),
                 office2Equipment, office2Lawyer, office2Department);
 
+        List<Office> offices = new ArrayList<>();
+        offices.add(theFirst);
+        offices.add(theSecond);
+
         LOGGER.info(theFirst);
         System.out.println();
 
@@ -166,6 +175,11 @@ public class MainClass {
         ClosedCase case3719 = new ClosedCase("Criminal", lilian, false);
         ClosedCase case2617 = new ClosedCase("Civil", andrew);
 
+        List<ClosedCase> allCases = new ArrayList<>();
+        allCases.add(case1267);
+        allCases.add(case2617);
+        allCases.add(case3719);
+
         LOGGER.info("The number of successful cases: " + ClosedCase.successfulCase);
         System.out.println();
 
@@ -175,12 +189,8 @@ public class MainClass {
 
         ServicePrice totalPrice = new ServicePrice();
 
-        LOGGER.info("The cost of all service for this clients is " + totalPrice.calculateAllServices(oleg, mike));
+        LOGGER.info("The cost of all service for this clients is " + totalPrice.calculateAllServices(clients));
         System.out.println();
-
-        Set<String> docs1 = new TreeSet<>();
-        docs1.add("delo1");
-        docs1.add("pasport");
 
         Equipment iphone = new Phone(4, 40, "472892");
         ControlClass.equipmentPurchase(iphone, 6);
@@ -243,19 +253,20 @@ public class MainClass {
         CEO chris = CEO.createInstance("Vladislav", "Kot", LocalDate.of(1980, 2, 6));
         System.out.println(chris);
 
-        for (Department element : office1Department) {
-            switch (element) {
-                case QA:
-                    LOGGER.info("There is QA department");
-                    break;
-                case HR:
-                    LOGGER.info("There is HR department");
-                    break;
-                case WEB:
-                    LOGGER.info("There is Web department");
-                    break;
-            }
-        }
+
+        office1Department.stream()
+                .map(department -> {
+                    switch (department) {
+                        case QA:
+                            return "There is QA department";
+                        case HR:
+                            return "There is HR department";
+                        case WEB:
+                            return "There is Web department";
+                        default:
+                            return Stream.empty();
+                    }
+                }).forEach(String -> LOGGER.info(String));
 
         String fileName = "src/main/resources/text.txt";
         String text = FileUtils.readFileToString(new File(fileName), StandardCharsets.UTF_8);
@@ -264,21 +275,17 @@ public class MainClass {
         Map<String, Integer> words = new TreeMap<>();
         String delimeter = "[^a-zA-Z-’']";
 
-        for (String word : text.split(delimeter)) {
-            int wordAmount = StringUtils.countMatches(text, word);
-            words.put(word, wordAmount);
-        }
+        String finalText = text;
+        Arrays.stream(text.split(delimeter))
+                .forEach(word -> words.put(word, StringUtils.countMatches(finalText, word)));
 
         Map<String, Integer> sortedWords = WordsCounting.sortByComparator(words);
-        System.out.println(sortedWords);
 
+        System.out.println();
         StringBuilder stringToFile = new StringBuilder();
-        for (Map.Entry<String, Integer> item : sortedWords.entrySet()) {
-            String result = "Word: " + item.getKey() + "; amount: " + item.getValue();
-            LOGGER.info(result);
-            stringToFile.append(result);
-            stringToFile.append("\n");
-        }
+
+        sortedWords.forEach((key, value) -> stringToFile.append("Word: " + key + "; amount: " + value).append("\n"));
+        LOGGER.info(stringToFile);
 
         FileUtils.writeStringToFile(new File("output.txt"), String.valueOf(stringToFile), StandardCharsets.UTF_8);
         System.out.println();
@@ -289,5 +296,47 @@ public class MainClass {
         };
 
         misha.salary(increasedSalary);
+
+        office1Equipment.put(1, directorPhone);
+        office1Equipment.put(2, personal);
+
+        office2Equipment.put(1, accountantPhone);
+        office2Equipment.put(2, portable);
+        office2Equipment.put(3, printer);
+
+        int EquipmentPrice = Stream.concat(office1Equipment.values().stream(), office2Equipment.values().stream())
+                .filter(equipment -> equipment.getPrice() > 300)
+                .mapToInt(equipment -> equipment.getPrice())
+                .sum();
+
+        LOGGER.info("The Price of equipment: " + EquipmentPrice);
+
+        List<Lawyer> allLawyers = new ArrayList<>();
+        allLawyers = offices.stream()
+                .flatMap(office -> office.getLawyer().stream())
+                .filter (lawyer -> lawyer.getExperience() > 5)
+                .collect(Collectors.toList());
+
+        List<Court> courts = new ArrayList<>();
+        courts.add(malinovka);
+        courts.add(central);
+        courts.add(angarskaya);
+
+        Optional <Integer> minCases = courts.stream()
+                .filter(court -> court.getCity().startsWith("M"))
+                .peek(court -> LOGGER.info(court))
+                .map(court -> court.getActualCaseNumber())
+                .sorted()
+                .findFirst();
+        LOGGER.info("The minimal amount of actual cases is: " + minCases.orElse(0));
+
+        List<ClosedCase> successfulCases = new ArrayList<>();
+        allCases.stream()
+                .filter(closedCase -> closedCase.isSuccessful())
+                .collect(Collectors.toList());
+
+        clients.stream()
+                .filter(client -> client.getCaseCategory().equals("Civil"))
+                .forEach(client -> LOGGER.info(client));
     }
 }

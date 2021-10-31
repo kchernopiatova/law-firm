@@ -13,9 +13,7 @@ public class Accounting<E> {
     private List<E> collection;
 
     public void print(List<E> collection) {
-        for (E element : collection) {
-            LOGGER.info(element);
-        }
+        collection.forEach(E -> LOGGER.info(E));
     }
 
     public int count(List<E> collection) {

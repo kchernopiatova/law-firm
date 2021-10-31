@@ -3,6 +3,9 @@ package com.solvd.lawfirm.serviceclass;
 import com.solvd.lawfirm.people.Client;
 import com.solvd.lawfirm.structure.Court;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 public class ServicePrice {
 
     public double calculateLawService(Client client, Court court) {
@@ -37,9 +40,8 @@ public class ServicePrice {
         return startPrice * coefficient;
     }
 
-    public double calculateAllServices(Client... clients) {
+    public double calculateAllServices(List<Client> clients) {
         double totalPrice = 0;
-
         for (Client value : clients) {
             String client = value.getCaseCategory();
             switch (client) {
