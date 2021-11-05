@@ -4,6 +4,8 @@ import com.solvd.lawfirm.exception.EmptyArrayException;
 import com.solvd.lawfirm.exception.EmptySetException;
 import com.solvd.lawfirm.infrastructure.Equipment;
 import com.solvd.lawfirm.people.Lawyer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import java.util.Set;
 
 public class Office extends Building implements Countable {
 
+    private static final Logger LOGGER = LogManager.getLogger(Office.class);
     private LocalDate foundationDate;
     private Map<Integer, Equipment> equipment;
     private Set<Lawyer> lawyer;

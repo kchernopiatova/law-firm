@@ -254,22 +254,13 @@ public class MainClass {
         System.out.println();
 
         CEO chris = CEO.createInstance("Vladislav", "Kot", LocalDate.of(1980, 2, 6));
-        System.out.println(chris);
+        LOGGER.info(chris);
+        System.out.println();
 
 
         office1Department.stream()
-                .map(department -> {
-                    switch (department) {
-                        case QA:
-                            return "There is QA department";
-                        case HR:
-                            return "There is HR department";
-                        case WEB:
-                            return "There is Web department";
-                        default:
-                            return Stream.empty();
-                    }
-                }).forEach(String -> LOGGER.info(String));
+                .map(department -> department.switchDepartment())
+                .forEach(String -> LOGGER.info(String));
 
         String fileName = "src/main/resources/text.txt";
         String text = FileUtils.readFileToString(new File(fileName), StandardCharsets.UTF_8);
@@ -317,7 +308,7 @@ public class MainClass {
         List<Lawyer> allLawyers = new ArrayList<>();
         allLawyers = offices.stream()
                 .flatMap(office -> office.getLawyer().stream())
-                .filter (lawyer -> lawyer.getExperience() > 5)
+                .filter(lawyer -> lawyer.getExperience() > 5)
                 .collect(Collectors.toList());
 
         List<Court> courts = new ArrayList<>();
@@ -325,7 +316,7 @@ public class MainClass {
         courts.add(central);
         courts.add(angarskaya);
 
-        Optional <Integer> minCases = courts.stream()
+        Optional<Integer> minCases = courts.stream()
                 .filter(court -> court.getCity().startsWith("M"))
                 .peek(court -> LOGGER.info(court))
                 .map(court -> court.getActualCaseNumber())
@@ -346,7 +337,7 @@ public class MainClass {
         Client newClient = null;
         try {
             Class<?> clientClass = Class.forName("com.solvd.lawfirm.people.Client");
-            Class[] clientParameters = {String.class, String.class};
+            Class<?>[] clientParameters = {String.class, String.class};
             newClient = (Client) clientClass.getConstructor(clientParameters).newInstance("Eva", "Green");
             Field clientLawyer = clientClass.getDeclaredField("lawyer");
             clientLawyer.setAccessible(true);

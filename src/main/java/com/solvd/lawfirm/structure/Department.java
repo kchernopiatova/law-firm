@@ -10,7 +10,22 @@ public enum Department {
         this.title = title;
     }
 
-    @Override
+    public String switchDepartment() {
+        String result = null;
+        switch (title) {
+            case "QA":
+                result = "There is QA department";
+                break;
+            case "HR":
+                result = "There is HR department";
+                break;
+            case "Web":
+                result = "There is Web department";
+                break;
+        }
+        return result;
+    }
+
     public String toString() {
         return "Name: " + title + ";";
     }
